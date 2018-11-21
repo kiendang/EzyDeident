@@ -10,14 +10,14 @@
 #'   exactly the same as in the original input file. 
 readFileReserveHeader <- function(file, header = TRUE, ...) {
   if (header) {
-    datain <- fread(input = file, header = FALSE, ...)
+    datain <- data.table::fread(input = file, header = FALSE, ...)
     datain <- data.frame(datain)
     cnames <- as.vector(sapply(datain[1, ], as.character))
     datain <- datain[-1, ]
     names(datain) <- cnames
     datain
   } else {
-    fread(input = file, header = FALSE, ...)
+    data.table::fread(input = file, header = FALSE, ...)
   }
 }
 #' Writing data to a csv file, preventing R from modifying its column names

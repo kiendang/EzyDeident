@@ -4,7 +4,6 @@ options(shiny.trace=FALSE)
 library(shiny)
 library(digest)
 library(plyr)
-library(data.table)
 source('masking_code.R')
 source('functions.R')
 
