@@ -18,7 +18,6 @@ deps <- c(
   "magrittr",
   "markdown",
   "mime",
-  "plyr",
   "rmarkdown",
   "shiny",
   "stringi",
@@ -28,7 +27,12 @@ deps <- c(
   "pander",
   "downloader",
   "data.table",
-  "shinythemes"
+  "shinythemes",
+  "shinyjs",
+  "dplyr",
+  "purrr",
+  "readxl",
+  "lubridate"
 )
 
 packs <- rownames(installed.packages())
