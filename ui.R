@@ -233,9 +233,9 @@ shinyUI(
                           "seconds" = 5L
                         ), selected = 1L),
             h5("between"),
-            numericInput("from", NULL, 100L, NA, 1L),
+            numericInput("from", NULL, 100L, step = 1L),
             h5("and"),
-            numericInput("to", NULL, 300L, NA, 1L),
+            numericInput("to", NULL, 300L, step = 1L),
             h5("years.")
           )
         ),
