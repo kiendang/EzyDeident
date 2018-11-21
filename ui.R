@@ -217,20 +217,31 @@ shinyUI(
             )
           ),
           column(
-            width = 4,
+            width = 3,
             h5("Select identifier column"),
             uiOutput("identifier-ui")
           ),
           column(
-            width = 4,
-            h5("Specify shifting range (years)"),
+            width = 3,
+            h5("Timestamps will be shifted by a random number of"),
+            selectInput("shift-unit-mapping", NULL,
+                        choices = list(
+                          "weeks" = 1L,
+                          "days" = 2L,
+                          "hours" = 3L,
+                          "minutes" = 4L,
+                          "seconds" = 5L
+                        ), selected = 1L),
+            h5("between"),
             numericInput("from", NULL, 100L, NA, 1L),
-            numericInput("to", NULL, 300L, NA, 1L)
+            h5("and"),
+            numericInput("to", NULL, 300L, NA, 1L),
+            h5("years.")
           )
         ),
         fluidRow(
           column(
-            width = 4,
+            width = 3,
             h5("Download mappings"),
             downloadButton("download-mappings", "Download",
                            class = "btn-primary")
@@ -242,7 +253,7 @@ shinyUI(
         "Apply shifting",
         fluidRow(
           column(
-            width = 4,
+            width = 3,
             h5("Upload original data"),
             fileInput(
               "unshifted-file",
@@ -254,12 +265,12 @@ shinyUI(
             )
           ),
           column(
-            width = 4,
+            width = 3,
             h5("Select identifier column"),
             uiOutput("unshifted-identifier-ui")
           ),
           column(
-            width = 4,
+            width = 3,
             h5("Upload mappings"),
             fileInput(
               "mappings-upload",
@@ -272,11 +283,23 @@ shinyUI(
                 ".csv", ".tsv", ".txt"
               )
             )
+          ),
+          column(
+            width = 3,
+            h5("Unit of shifting period"),
+            selectInput("shift-unit-apply", NULL,
+                        choices = list(
+                          "weeks" = 1L,
+                          "days" = 2L,
+                          "hours" = 3L,
+                          "minutes" = 4L,
+                          "seconds" = 5L
+                        ), selected = 1L)
           )
         ),
         fluidRow(
           column(
-            width = 4,
+            width = 3,
             h5("Download shifted data"),
             downloadButton("download-shifted", "Download",
                            class = "btn-primary")

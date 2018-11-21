@@ -435,8 +435,11 @@ shinyServer(function(input, output, session) {
       return(NULL)
     }
     
-    from_week <- from * 365L %/% 7L
-    to_week <- to * 365L %/% 7L
+    shift_unit_ls <- list(dweeks, ddays, dhours, dminutes, dseconds)
+    shift_unit <- shift_unit_ls[[as.integer(input$`shift-unit-mapping`)]]
+    
+    from_week <- dyears(from) / shift_unit()
+    to_week <- dyears(to) / shift_unit()
     
     data %>%
       select(!! as.name(identifier)) %>%
@@ -454,7 +457,17 @@ shinyServer(function(input, output, session) {
   )
   
   output$`download-mappings` <- downloadHandler(
-    filename = "mappings.csv",
+    filename = function() {
+      shift_unit <- list(
+        "weeks",
+        "days",
+        "hours",
+        "minutes",
+        "seconds"
+      )[[as.integer(input$`shift-unit-mapping`)]]
+      
+      sprintf("shifting_periods_in_%s.csv", shift_unit)
+    },
     content = function(file) {
       if (is.null(mappings())) return(NULL)
       data.table::fwrite(mappings(), file)
@@ -518,11 +531,15 @@ shinyServer(function(input, output, session) {
       return(NULL)
     }
     
+    shift_unit_ls <- list(dweeks, ddays, dhours, dminutes, dseconds)
+    shift_unit <- shift_unit_ls[[as.integer(input$`shift-unit-apply`)]]
+    
     df <- unshifted_df %>%
       left_join(mappings_df %>%
-                  rename(!! identifier := (!! as.name("identifier"))),
+                  rename(!! identifier := (!! as.name("identifier"))) %>%
+                  mutate(shift = as.numeric(shift)),
                 by = identifier) %>%
-      mutate_if(is.instant, funs(. + weeks(shift))) %>%
+      mutate_if(is.instant, funs(. + shift_unit(shift))) %>%
       mutate_if(
         is.instant,
         funs(
