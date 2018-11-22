@@ -1,4 +1,5 @@
-shinyUI(
+shinyUI(tagList(
+  useShinyjs(),
   navbarPage(
     "Ezy De-Identifier",
     theme = shinytheme("united"),
@@ -329,4 +330,4 @@ shinyUI(
       )
     )
   )
-)
+))
