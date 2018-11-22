@@ -431,7 +431,7 @@ shinyServer(function(input, output, session) {
     to <- input$to
     identifier <- input$identifier
     
-    if (is.null(data) | is.null(from) | is.null(to) | is.null(identifier)) {
+    if (is.null(data) || is.null(from) || is.null(to) || is.null(identifier)) {
       return(NULL)
     }
     
@@ -504,7 +504,7 @@ shinyServer(function(input, output, session) {
   verify_user_mappings_upload <- reactive({
     df <- user_mappings_upload()
     if (is.null(df)) return(NULL)
-    ("identifier" %in% names(df)) & ("shift" %in% names(df))
+    ("identifier" %in% names(df)) && ("shift" %in% names(df))
   })
   
   observe({
@@ -530,7 +530,7 @@ shinyServer(function(input, output, session) {
   })
   
   user_mappings <- reactive({
-    if (is.null(user_mappings_upload()) |
+    if (is.null(user_mappings_upload()) ||
         is.null(verify_user_mappings_upload())) return(NULL)
     
     if (verify_user_mappings_upload()) {
@@ -552,7 +552,7 @@ shinyServer(function(input, output, session) {
     identifier <- input$`unshifted-identifier`
     mappings_df <- user_mappings()
     
-    if (is.null(unshifted_df) | is.null(identifier) | is.null(mappings_df)) {
+    if (is.null(unshifted_df) || is.null(identifier) || is.null(mappings_df)) {
       return(NULL)
     }
     
