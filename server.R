@@ -553,7 +553,7 @@ shinyServer(function(input, output, session) {
   })
   
   observe(
-    if (is.null(user_mappings())) {
+    if (is.null(shifted())) {
       disable("download-shifted")
     } else {
       enable("download-shifted")
