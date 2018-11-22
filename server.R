@@ -488,8 +488,7 @@ shinyServer(function(input, output, session) {
     )
   })
   
-  user_mappings <- reactiveVal()
-  observe({
+  user_mappings_upload <- reactive({
     in_file <- input$`mappings-upload`
     if (is.null(in_file)) return(NULL)
     
@@ -500,17 +499,43 @@ shinyServer(function(input, output, session) {
         NULL
       }
     )
-    
-    if ((! "identifier" %in% names(df)) | (! "shift" %in% names(df))) {
+  })
+  
+  verify_user_mappings_upload <- reactive({
+    df <- user_mappings_upload()
+    if (is.null(df)) return(NULL)
+    ("identifier" %in% names(df)) & ("shift" %in% names(df))
+  })
+  
+  observe({
+    if (is.null(verify_user_mappings_upload())) return(NULL)
+    if (! verify_user_mappings_upload()) {
       showModal(modalDialog(
-        HTML("The file must contain one <i>identifier</i> column and 
-             one <i>shift</i> column"),
+        HTML("The file must contain one <b>identifier</b> column and 
+             one <b>shift</b> column."),
         easyClose = FALSE
-        ))
-    } else {
-      df %>%
-        select(!!! rlang::syms(c("identifier", "shift"))) %>%
-        user_mappings()
+      ))
+    }
+  })
+  
+  output$`verify-mappings-upload` <- renderUI({
+    if (is.null(verify_user_mappings_upload()) ||
+        verify_user_mappings_upload()) return(NULL)
+    
+    div(
+      class = "text-danger",
+      h5(HTML("The file must contain one <b>identifier</b> column and
+              one <b>shift</b> column."))
+    )
+  })
+  
+  user_mappings <- reactive({
+    if (is.null(user_mappings_upload()) |
+        is.null(verify_user_mappings_upload())) return(NULL)
+    
+    if (verify_user_mappings_upload()) {
+      user_mappings_upload() %>%
+        select(!!! rlang::syms(c("identifier", "shift")))
     }
   })
   

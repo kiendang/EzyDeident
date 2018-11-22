@@ -283,7 +283,8 @@ shinyUI(tagList(
                 "text/plain",
                 ".csv", ".tsv", ".txt"
               )
-            )
+            ),
+            uiOutput("verify-mappings-upload")
           ),
           column(
             width = 3,
